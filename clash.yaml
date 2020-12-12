@@ -1,0 +1,231 @@
+# HTTP 代理端口
+port: 7890
+
+# SOCKS5 代理端口
+socks-port: 7891
+
+# Linux 和 macOS 的 redir 代理端口 (如需使用此功能，请取消注释)
+#redir-port: 7892
+
+# 允许局域网的连接（可用来共享代理）
+allow-lan: true
+
+# 规则模式：Rule（规则） / Global（全局代理）/ Direct（全局直连）
+mode: Rule
+
+# 设置日志输出级别 (默认级别：info，级别越高日志输出量越大，越倾向于调试)
+# 四个级别：silent / info / warning / error / debug
+log-level: info
+
+# When set to false, resolver won't translate hostnames to IPv6 addresses
+ipv6: true
+
+# Clash 的 RESTful API
+external-controller: 127.0.0.1:9090
+
+# you can put the static web resource (such as clash-dashboard) to a directory, and clash would serve in `${API}/ui`
+# input is a relative path to the configuration directory or an absolute path
+# external-ui: folder
+
+# Secret for RESTful API (Optional)
+# secret: ""
+
+# experimental feature
+experimental:
+  ignore-resolve-fail: true # ignore dns reslove fail, default value is true
+
+dns:
+  enable: true
+  ipv6: false
+  listen: 0.0.0.0:53
+  enhanced-mode: fake-ip
+  nameserver:
+    - 119.29.29.29
+    - 223.5.5.5
+    - tls://1.1.1.1:853
+    - tls://1.0.0.1:853
+    - tls://dns.google:853
+  fallback:
+    - 156.154.70.1
+    - 156.154.71.1
+
+tun:
+  enable: false
+  macOS-auto-route: true
+  macOS-auto-detect-interface: true
+
+# Clash for Windows
+cfw-bypass:
+  - qq.com
+  - music.163.com
+  - '*.music.126.net'
+  - localhost
+  - 127.*
+  - 10.*
+  - 172.16.*
+  - 172.17.*
+  - 172.18.*
+  - 172.19.*
+  - 172.20.*
+  - 172.21.*
+  - 172.22.*
+  - 172.23.*
+  - 172.24.*
+  - 172.25.*
+  - 172.26.*
+  - 172.27.*
+  - 172.28.*
+  - 172.29.*
+  - 172.30.*
+  - 172.31.*
+  - 192.168.*
+  - <local>
+cfw-latency-timeout: 5000
+
+# 代理节点
+proxies:
+# 参考 https://github.com/Dreamacro/clash/wiki/configuration
+- name: "1 "
+    type: http
+    server: a1.ap.fastqvpn.com
+    port: "29980"
+    username: "320243621993381888"
+    password: df998403-ea7b-42e9-a4ec-9fc4826fb553
+    tls: true
+    skip-cert-verify: true
+  - name: "2 "
+    type: http
+    server: a2.ap.fastqvpn.com
+    port: "29980"
+    username: "320243621993381888"
+    password: df998403-ea7b-42e9-a4ec-9fc4826fb553
+    tls: true
+    skip-cert-verify: true
+  - name: "3 "
+    type: http
+    server: a3.ap.fastqvpn.com
+    port: "29980"
+    username: "320243621993381888"
+    password: df998403-ea7b-42e9-a4ec-9fc4826fb553
+    tls: true
+    skip-cert-verify: true
+  - name: "4 "
+    type: http
+    server: a4.ap.fastqvpn.com
+    port: "29980"
+    username: "320243621993381888"
+    password: df998403-ea7b-42e9-a4ec-9fc4826fb553
+    tls: true
+    skip-cert-verify: true
+
+# 代理组策略
+proxy-groups:
+# 代理节点选择
+- { name: "🚀節點選擇", type: select, proxies: ["🏆智能測速","🅰️CN2GIA", "🇦🇶TAIWAN","🇭🇰HKSAR", "🇯🇵JAPAN","1", "2", "3", "4"] }
+# 白名单模式 PROXY，黑名单模式 DIRECT
+#- { name: "🧩Final", type: select, proxies: ["🚀節點選擇", "DIRECT"] }
+- { name: "🌏視頻網站", type: select, proxies: ["🚀節點選擇","1", "2", "3","4"] }
+- { name: "🇲🇴港台專區", type: select, proxies: ["DIRECT","1", "2", "3", "4"] }
+#- { name: "💳PayPal", type: select, proxies: ["DIRECT","1", "2", "3", "4"] }
+
+# url-test 通过指定的 URL 测试并选择延迟最低的节点
+# fallback 通过指定的 URL 测试并选择可用的节点，当 1 故障不可用时自动切换到 2 以此类推
+
+- { name: "🏆智能測速", type: url-test, proxies: ["🅰️CN2GIA", "🇦🇶TAIWAN","🇭🇰HKSAR", "🇯🇵JAPAN"], url: "http://www.qualcomm.cn/generate_204", interval: 300 }
+
+- { name: "🅰️CN2GIA", type: url-test, proxies: ["1", "2"], url: "http://www.gstatic.com/generate_204", interval: 300 }
+- { name: "🇦🇶TAIWAN", type: url-test, proxies: ["3", "4"] , url: "http://www.gstatic.com/generate_204", interval: 300 }
+- { name: "🇭🇰HKSAR", type: fallback, proxies: ["5", "6"], url: "http://www.qualcomm.cn/generate_204", interval: 300 }
+- { name: "🇯🇵JAPAN", type: fallback, proxies: ["7","8"] , url: "http://www.qualcomm.cn/generate_204", interval: 300 }
+
+# load-balance: 负载均衡
+# - { name: "LoadBalance", type: load-balance, proxies: ["1", "2", "3", "4"], url: "http://www.gstatic.com/generate_204", interval: 300 }
+
+# 关于 Rule Provider 请查阅：https://lancellc.gitbook.io/clash/clash-config-file/rule-provider
+
+rule-providers:
+  # name: # Provider 名称
+  #   type: http # http 或 file
+  #   behavior: classical # 或 ipcidr、domain
+  #   path: # 文件路径
+  #   url: # 只有当类型为 HTTP 时才可用，您不需要在本地空间中创建新文件。
+  #   interval: # 自动更新间隔，仅在类型为 HTTP 时可用
+
+    Streaming:
+      type: http
+      behavior: classical
+      path: ./RuleSet/StreamingMedia/Streaming.yaml
+      url: https://raw.fastgit.org/DivineEngine/Profiles/master/Clash/RuleSet/StreamingMedia/Streaming.yaml
+      interval: 86400
+
+    StreamingSE:
+      type: http
+      behavior: classical
+      path: ./RuleSet/StreamingMedia/StreamingSE.yaml
+      url: https://raw.fastgit.org/DivineEngine/Profiles/master/Clash/RuleSet/StreamingMedia/StreamingSE.yaml
+      interval: 86400
+
+    PayPal:
+      type: http
+      behavior: classical
+      path: ./RuleSet/Extra/Paypal.yaml
+      url: https://raw.fastgit.org/DivineEngine/Profiles/master/Clash/RuleSet/Extra/PayPal.yaml
+      interval: 86400
+
+    Global:
+      type: http
+      behavior: classical
+      path: ./RuleSet/Global.yaml
+      url: https://raw.fastgit.org/DivineEngine/Profiles/master/Clash/RuleSet/Global.yaml
+      interval: 86400
+
+    China:
+      type: http
+      behavior: classical
+      path: ./RuleSet/China.yaml
+      url: https://raw.fastgit.org/DivineEngine/Profiles/master/Clash/RuleSet/China.yaml
+      interval: 86400
+
+    ChinaIP:
+      type: http
+      behavior: ipcidr
+      path: ./RuleSet/Extra/ChinaIP.yaml
+      url: https://raw.fastgit.org/DivineEngine/Profiles/master/Clash/RuleSet/Extra/ChinaIP.yaml
+      interval: 86400
+
+# 规则
+rules:
+  # 不同于 Surge，后面要用到的策略组要放到前面
+  # Global Area Network
+  # (Streaming Media)
+  - RULE-SET,Streaming,🌏視頻網站
+  # (StreamingSE)
+  - RULE-SET,StreamingSE,🇲🇴港台專區
+  # (Paypal)
+  - RULE-SET,PayPal,DIRECT
+  # (my blog)
+  - DOMAIN-SUFFIX,phlinhng.com,DIRECT
+  # (DNS Cache Pollution) / (IP Blackhole) / (Region-Restricted Access Denied) / (Network Jitter)
+  - RULE-SET,Global,🚀節點選擇
+
+  # China Area Network
+  - RULE-SET,China,DIRECT
+
+  # Local Area Network
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  - IP-CIDR,127.0.0.0/8,DIRECT
+  - IP-CIDR,100.64.0.0/10,DIRECT
+  - IP-CIDR,224.0.0.0/4,DIRECT
+
+  # （可选）使用来自 ipipdotnet 的 ChinaIP 以解决数据不准确的问题，使用 ChinaIP.yaml 时可禁用下列直至（包括）「GEOIP,CN」规则
+  - RULE-SET,ChinaIP,DIRECT
+  # Tencent
+  #- IP-CIDR,119.28.28.28/32,DIRECT
+  #- IP-CIDR,182.254.116.0/24,DIRECT
+  # GeoIP China
+  #- GEOIP,CN,DIRECT
+
+  #- MATCH,🧩Final
+  - MATCH,🚀節點選擇
